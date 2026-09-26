@@ -15,7 +15,7 @@ rõ ranh giới đi theo làn chính hay theo nhánh rẽ.
    lệch làn (LDW). Người dùng dữ liệu là kỹ sư huấn luyện và đánh giá model đó.
 2. **Output annotation nào thực sự cần?** Mỗi ảnh tối đa hai polyline: `ego_left` và `ego_right`, điểm đặt trên tâm
    vạch sơn, vẽ từ gần xe ra xa. Thuộc tính: `marking` (solid / dashed / double), `visibility` (visible / occluded /
-   faded), `topology` (normal / merge / split). Bên nào không xác định được thì gắn tag ảnh `ego_boundary_unknown`
+   faded), `topology` (normal / merge_split). Bên nào không xác định được thì gắn tag ảnh `ego_boundary_unknown`
    với thuộc tính `side` (left / right / both).
 3. **Failure nào gây hậu quả lớn nhất?** Ranh giới đi theo nhánh tách/lối ra hoặc lấy nhầm vạch của làn bên cạnh:
    model học rằng làn xe chủ rẽ sai hướng, LKA sẽ lái xe lệch khỏi làn. Lỗi lớn thứ hai: bỏ sót ranh giới có thật chỉ

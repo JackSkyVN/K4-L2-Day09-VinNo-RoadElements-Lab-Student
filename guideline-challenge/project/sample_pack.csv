@@ -1,1 +1,18 @@
 sample_id,split,tags,reason
+BDD14,example,normal,Cao tốc hai bên vạch đứt rõ; ví dụ chuẩn cho rule vạch gần nhất và nối qua khoảng trống vạch đứt
+BDD20,example,normal;edge,Vạch vàng đôi bên trái và hai vạch trắng liền bên phải; thử rule đặt điểm giữa vạch đôi và chỉ lấy vạch gần nhất
+BDD08,example,edge;occlusion,Xe phía trước che phần xa vạch vàng; thử rule điểm đầu ở cạnh ảnh và dừng ở chỗ bị che tới cuối
+BDD05,example,edge;critical,Vạch trắng liền bên phải giáp vùng kẻ sọc; thử topology merge_split và không vẽ sọc trong gore
+BDD01,example,edge;negative,Lối ra và gore cách làn xe chủ một làn; vạch phải đoạn gần mòn; thử ignore vạch lối ra và visibility faded
+BDD03,calibration,edge;critical,Biển lối ra phía trước và vạch liền bên phải tách ra xa; thử rule đi theo làn thẳng không theo nhánh
+BDD07,calibration,edge;low_visibility,Mặt đường vá và vạch vàng đôi mòn; thử ranh giới giữa faded và unknown cùng rule vạch đôi
+BDD19,calibration,edge;low_visibility,Mặt đường bê tông sáng và vạch mờ; thử mức mờ nào vẫn vẽ được theo tolerance
+BDD23,calibration,ambiguity;negative,Phố hẹp gần như không có vạch giữa hai hàng xe đỗ; thử khi nào dùng tag ego_boundary_unknown
+BDD12,calibration,edge,Vạch qua đường cắt ngang làn xe chủ; thử rule dừng polyline ở mép gần vạch qua đường
+BDD17,calibration,low_visibility;occlusion,Trời mưa và giá hút kính che một phần ảnh; thử vạch khó thấy trên đường ướt và hình phản chiếu
+BDD26,calibration,low_visibility;ambiguity,Ảnh đêm tối gần như không thấy vạch; thử unknown kèm needs_review khi không chắc có vạch
+BDD06,blind,normal,Cao tốc vạch đứt hai bên; kiểm người lạ làm đúng case cơ bản
+BDD09,blind,edge;occlusion,Đường dẫn cong có xe sát vạch bên phải; thử mật độ điểm ở đoạn cong và rule bị che
+BDD24,blind,edge;low_visibility,Phố có tuyết và phản chiếu vạch trên nắp capo; một bên chỉ có tuyết và bó vỉa; thử unknown một bên
+BDD16,blind,critical;occlusion,Dưới cầu vượt đường cong có vùng kẻ sọc sát làn xe chủ; vẽ theo sọc hoặc nhánh là lỗi nặng nhất
+BDD15,blind,ambiguity,Xe nằm sát vạch đứt bên phải như đang chuyển làn; thử rule chọn làn xe chủ và needs_review

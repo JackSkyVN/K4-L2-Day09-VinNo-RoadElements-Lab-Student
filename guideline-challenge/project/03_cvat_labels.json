@@ -1,1 +1,93 @@
-[]
+[
+  {
+    "name": "ego_left",
+    "color": "#1E88E5",
+    "type": "polyline",
+    "attributes": [
+      {
+        "name": "marking",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "solid", "dashed", "double"]
+      },
+      {
+        "name": "visibility",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "visible", "occluded", "faded"]
+      },
+      {
+        "name": "topology",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "normal", "merge_split"]
+      },
+      {
+        "name": "needs_review",
+        "mutable": false,
+        "input_type": "checkbox",
+        "default_value": "false",
+        "values": ["false"]
+      }
+    ]
+  },
+  {
+    "name": "ego_right",
+    "color": "#E53935",
+    "type": "polyline",
+    "attributes": [
+      {
+        "name": "marking",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "solid", "dashed", "double"]
+      },
+      {
+        "name": "visibility",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "visible", "occluded", "faded"]
+      },
+      {
+        "name": "topology",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "normal", "merge_split"]
+      },
+      {
+        "name": "needs_review",
+        "mutable": false,
+        "input_type": "checkbox",
+        "default_value": "false",
+        "values": ["false"]
+      }
+    ]
+  },
+  {
+    "name": "ego_boundary_unknown",
+    "color": "#8E24AA",
+    "type": "tag",
+    "attributes": [
+      {
+        "name": "side",
+        "mutable": false,
+        "input_type": "select",
+        "default_value": "__undefined__",
+        "values": ["__undefined__", "left", "right", "both"]
+      },
+      {
+        "name": "needs_review",
+        "mutable": false,
+        "input_type": "checkbox",
+        "default_value": "false",
+        "values": ["false"]
+      }
+    ]
+  }
+]
