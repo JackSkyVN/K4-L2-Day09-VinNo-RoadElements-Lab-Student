@@ -1,6 +1,6 @@
 # Annotation guideline — Ranh giới trái/phải của làn xe chủ (ego lane) tại merge/split, vạch mờ và vạch bị che
 
-**Version:** v2
+**Version:** v3
 
 <!--
 v0 = chưa có bản nháp. Đổi dòng Version ở trên thành v1 khi xong bản nháp đầu, v2 sau calibration, v3 sau blind
@@ -16,6 +16,30 @@ Ví dụ trong guideline chỉ dùng ảnh split example hoặc calibration, kh�
 đang chạy và `ego_right` trên vạch sơn bên phải. Đặt điểm lên **tâm vạch sơn**, vẽ **từ gần xe ra xa**. Bên nào
 không có hoặc không tìm được vạch sơn thì không vẽ polyline mà gắn tag `ego_boundary_unknown`. Không chắc thì vẫn
 làm theo cách hợp lý nhất và bật `needs_review`.
+
+**Cây quyết định — làm lần lượt cho bên TRÁI rồi bên PHẢI** (chi tiết ở các mục được nhắc):
+
+```text
+0. Tìm làn xe chủ: làn chứa điểm giữa đáy ảnh x = 640 (mục 1).
+   Vạch nằm bên trái x = 640 khi kéo xuống mép nắp capo → ego_left; bên phải → ego_right.
+1. Bên này có VẠCH SƠN không? (bó vỉa, tuyết, cọc, rào, xe đỗ KHÔNG phải vạch sơn — mục 5)
+   ├─ KHÔNG → tag ego_boundary_unknown, chọn side. Xong bên này.
+   └─ CÓ → bước 2
+2. Đủ sơn để dựng đường? (≥ 2 đoạn sơn tách nhau, HOẶC 1 đoạn liền ≥ 50 px — mục 6)
+   ├─ KHÔNG → tag ego_boundary_unknown, chọn side. Xong bên này.
+   └─ CÓ → vẽ polyline (mục 3), rồi chọn attribute:
+3. visibility (mục 6): có đoạn bị VẬT che nằm giữa polyline → occluded
+                       else ≥ 1/3 chiều dài polyline khó thấy → faded
+                       else → visible
+4. marking (mục 4):    hai vạch song song → double
+                       thấy khoảng trống trên cùng một đường → dashed
+                       một đoạn liền ≥ 150 px không khoảng trống → solid
+                       không đủ bằng chứng → chọn theo phán đoán + needs_review
+5. topology (mục 4):   bên kia vạch có VẠCH SƠN gore / nhánh rẽ / làn nhập → merge_split
+                       else → normal
+6. needs_review (mục 7): bật khi ranh giới kéo xuống mép nắp capo cách x = 640 dưới 150 px,
+                       hoặc khi không chắc ở bất kỳ bước nào.
+```
 
 ## 1. Objective + scope
 
@@ -73,14 +97,20 @@ nằm bên phải là ranh giới phải.
 - `marking`, `visibility`, `topology`, `side` mặc định là `__undefined__`. **Phải chọn giá trị**, để
   `__undefined__` là lỗi.
 - Vạch đổi kiểu dọc đường (ví dụ gần xe là vạch đứt, xa hơn là vạch liền): `marking` lấy theo **đoạn gần xe nhất**.
-- **Phân biệt liền / đứt khi khó nhìn** (đêm, mưa, xa): chỉ chọn `dashed` khi thấy **ít nhất 2 đoạn sơn tách nhau bởi
-  khoảng trống**; chỉ chọn `solid` khi thấy **một đoạn sơn liền dài hơn 2 lần** một đoạn vạch đứt bình thường ở cùng
-  khoảng cách. Không đủ bằng chứng cho cả hai: chọn theo phán đoán tốt nhất và bật `needs_review`.
+- **Phân biệt liền / đứt** (nhất là khi đêm, mưa, xa), đo trực tiếp trên ảnh, không so với vạch khác:
+  - `dashed`: thấy **ít nhất một khoảng trống** mặt đường giữa hai đoạn sơn **trên cùng một đường**.
+  - `solid`: thấy **một đoạn sơn liền dài từ 150 px** (đo theo đường đi của vạch trên ảnh) mà không có khoảng trống.
+  - Không rơi vào hai trường hợp trên: chọn theo phán đoán tốt nhất và bật `needs_review`.
 - `visibility` có nhiều trạng thái trong cùng một đường: chọn theo thứ tự ưu tiên `occluded` > `faded` > `visible`.
+  Chỉ dùng **một** giá trị vì downstream chỉ cần biết trạng thái xấu nhất để lọc hoặc giảm trọng số đường đó; không
+  cần biết đoạn nào che, đoạn nào mờ.
 - `topology = merge_split` chỉ khi trong đoạn đã vẽ, phía bên kia của vạch có **vạch sơn** của vùng kẻ sọc (gore),
   của nhánh rẽ/lối ra, hoặc của làn đang nhập vào. Còn lại là `normal`.
+- **Vạch sơn của gore** là mọi vạch sơn bên trong hoặc viền vùng kẻ sọc: sọc chéo, chữ V (chevron), vạch viền ngoài.
+  Thấy bất kỳ dạng nào giáp ranh giới là đủ.
 - **Không tính là merge_split:** bó vỉa, đảo giao thông bê tông, dải phân cách, lề đường, làn đỗ xe, lối vào cây xăng
-  hay bãi đỗ, giao lộ. Những thứ này không phải vạch sơn của điểm nhập/tách làn.
+  hay bãi đỗ, giao lộ, **vật cản trên mặt đường** (đống tuyết, cọc, rào, thùng, xe đỗ). Những thứ này không phải vạch
+  sơn của điểm nhập/tách làn.
 
 ## 5. Inclusion / exclusion
 
@@ -96,14 +126,23 @@ nằm bên phải là ranh giới phải.
 - Vạch của các làn khác, kể cả vạch viền mép đường ở làn xa hơn.
 - Sọc chéo hay chữ V bên trong vùng kẻ sọc; vạch của nhánh rẽ/lối ra khi làn xe chủ đi thẳng.
 - Vạch qua đường, vạch dừng, mũi tên, chữ và ký hiệu sơn trên mặt đường.
-- Bó vỉa, lề cỏ, mép nhựa, dải phân cách bê tông, hàng xe đỗ. Đây không phải vạch sơn.
+- Bó vỉa (kể cả bó vỉa sơn đỏ-trắng), lề cỏ, mép nhựa, dải phân cách bê tông, hàng xe đỗ. Đây không phải vạch sơn.
+  Bó vỉa đúng là ranh giới vật lý, nhưng bài toán này chỉ thu **vạch sơn** cho chức năng giữ làn (xem
+  `Objective + scope`); bên nào chỉ có bó vỉa thì gắn tag unknown để downstream biết bên đó không có vạch.
+- **Vật cản trên mặt đường** — đống tuyết, cọc, rào chắn, thùng rác, xe đỗ giữa đường. Không vẽ theo mép vật cản,
+  không coi vật cản là vùng kẻ sọc. Vạch sơn nằm cạnh vật cản vẫn vẽ bình thường nếu thấy sơn; bên nào chỉ có vật cản
+  mà không có vạch sơn thì là UNKNOWN.
 - Hình phản chiếu trên nắp capo, vệt đèn phản chiếu trên đường ướt.
 - Vạch bên kia giao lộ, **khi giữa nắp capo và vạch qua đường có vạch làn**: vẽ vạch làn đó và dừng polyline ở mép
   gần của vạch qua đường, không vẽ tiếp sang bên kia.
 
-**Xe đã ở sát vạch qua đường hoặc trong giao lộ** (giữa nắp capo và vạch qua đường không có vạch làn nào): vẽ vạch
-của làn **phía bên kia vạch qua đường mà xe đang hướng thẳng vào** (làn chứa điểm giữa đáy ảnh khi kéo thẳng lên).
-Điểm đầu đặt ở mép **xa** của vạch qua đường, không kéo polyline băng qua vạch qua đường.
+**Xe đã ở sát vạch qua đường hoặc trong giao lộ.** "Sát" nghĩa là **giữa mép nắp capo và mép gần của vạch qua đường
+không có đoạn sơn làn nào** — không phụ thuộc khoảng cách px. Khi đó vẽ vạch của làn **phía bên kia vạch qua đường mà
+xe đang hướng thẳng vào** (làn chứa x = 640 khi kéo thẳng lên). Điểm đầu đặt ở mép **xa** của vạch qua đường, không kéo
+polyline băng qua vạch qua đường. Ví dụ: BDD12 ở mục 9.
+
+**Nhiều vạch qua đường chồng nhau** (giao lộ nhiều nhánh) mà không xác định được làn phía bên kia xe đang hướng vào:
+tag `ego_boundary_unknown`, `side = both`, bật `needs_review`.
 
 **Tại điểm nhập/tách làn:** ranh giới đi theo **làn mà xe đang ở trong**. Làn xe chủ đi thẳng, bên cạnh có nhánh tách
 ra: vẽ theo vạch của làn đi thẳng, bỏ vạch của nhánh. Xe đang ở trong chính làn lối ra: vẽ theo vạch của làn lối ra.
@@ -114,14 +153,19 @@ Không phân biệt được xe đang ở làn nào: xem mục 7.
 | Tình huống | Làm gì | `visibility` |
 |---|---|---|
 | Vạch rõ từ đầu đến cuối (kể cả khoảng trống của vạch đứt) | vẽ bình thường | `visible` |
-| Một đoạn giữa bị xe/vật che, hai đầu đoạn che vẫn thấy vạch | nối thẳng qua đoạn bị che theo hướng của vạch | `occluded` |
+| Một đoạn giữa bị xe/vật che, hai đầu đoạn che vẫn thấy vạch — kể cả khi vạch hiện lại ở phía bên kia chiếc xe phía trước | nối qua đoạn bị che theo hướng của vạch | `occluded` (bắt buộc — đã nối qua sau xe thì không được chọn `visible` hay `faded`) |
 | Vạch bị che từ một chỗ trở ra xa, không thấy lại | dừng ở điểm cuối còn thấy, không đoán tiếp | giữ theo đoạn đã vẽ |
-| Từ **1/3 chiều dài** đoạn đã vẽ trở lên không thấy rõ sơn — do sơn mòn/tróc, trời tối, mưa ướt, loá đèn — nhưng vẫn dò được đường đi của vạch (không tính khoảng trống của vạch đứt) | vẽ trên phần sơn còn thấy | `faded` |
+| Từ **1/3 chiều dài polyline** trở lên không thấy rõ sơn — do sơn mòn/tróc, trời tối, mưa ướt, loá đèn — nhưng vẫn dò được đường đi của vạch | vẽ trên phần sơn còn thấy | `faded` |
 | Dưới 1/3 chiều dài khó thấy | vẽ bình thường | `visible` |
 | Bên đó **không đủ sơn để dựng đường** — không có ít nhất 2 đoạn sơn tách nhau trên cùng một đường, và cũng không có đoạn sơn liền nào dài từ 50 px trở lên (tuyết phủ, tối hẳn, mòn hết, không có vạch) | không vẽ bên đó, gắn tag unknown | — |
 | Chỉ thấy 2–3 vệt sáng mà không chắc là sơn hay phản chiếu | vẽ theo các vệt đó | `faded`, bật `needs_review` |
 | Vạch bị cắt ở cạnh ảnh | điểm đầu đặt ở cạnh ảnh | theo đoạn đã vẽ |
 | Vạch ở xa, nhỏ | vẽ tới chỗ còn phân biệt được vạch với mặt đường | theo đoạn đã vẽ |
+
+**Cách đo 1/3 cho `faded`:** đo theo **chiều dài polyline trên ảnh** (px), không phải chiều dài vạch thật ngoài đường.
+Khoảng trống của vạch đứt **không** tính là khó thấy. Ước lượng nhanh: chia polyline thành 3 đoạn bằng nhau theo
+chiều dài; nếu có ít nhất một đoạn mà gần như không thấy sơn (hoặc tổng các chỗ khó thấy cộng lại bằng một đoạn như
+vậy) thì chọn `faded`.
 
 Đoạn bị che ở **gần xe** (xe bên cạnh che phần dưới của vạch) mà phía trên vẫn thấy: bắt đầu polyline từ chỗ thấp
 nhất còn thấy vạch, không đoán xuống tới nắp capo. `occluded` chỉ dùng khi đoạn bị che nằm **giữa** hai đoạn đã vẽ;
@@ -134,14 +178,17 @@ che ở đầu hoặc ở cuối thì chỉ cắt ngắn polyline, `visibility` 
 | **LABEL** | tìm được vạch sơn là ranh giới làn xe chủ | polyline `ego_left` / `ego_right` với đủ attribute |
 | **IGNORE** | vạch nằm ngoài scope (mục 5) | không có polyline nào trên vạch đó |
 | **UNKNOWN** | một bên **không có vạch sơn** (chỉ có bó vỉa, xe đỗ, mép đường), hoặc bên đó **không đủ sơn để dựng đường** (dưới 2 đoạn sơn tách nhau và không có đoạn sơn liền nào dài từ 50 px) | không vẽ polyline bên đó; thêm tag `ego_boundary_unknown`, `side` = `left` / `right` / `both` |
-| **ESCALATE** | có vạch nhưng **không chắc** nó có phải ranh giới làn xe chủ: xe đang đè vạch hoặc đang chuyển làn, không rõ xe ở làn đi thẳng hay làn lối ra, hai vạch gần nhau không rõ vạch nào của làn mình | vẫn vẽ polyline theo phán đoán tốt nhất, bật `needs_review` trên polyline đó |
+| **ESCALATE** | có vạch nhưng **không chắc** nó có phải ranh giới làn xe chủ: **ranh giới kéo xuống mép nắp capo cách x = 640 dưới 150 px** (xe sát vạch, đè vạch hoặc đang chuyển làn), không rõ xe ở làn đi thẳng hay làn lối ra, hai vạch gần nhau không rõ vạch nào của làn mình | vẫn vẽ polyline theo phán đoán tốt nhất, bật `needs_review` trên polyline đó |
 
 - Ảnh đêm, mưa hay loá **không tự động** là UNKNOWN: đếm đoạn sơn theo tiêu chí ở trên. Thấy từ 2 đoạn sơn tách nhau,
   hoặc một đoạn sơn liền dài từ 50 px, thì vẽ (`faded` nếu khó thấy); không đủ thì gắn tag unknown.
 - Không chắc một vệt là sơn hay phản chiếu đèn: làm theo phán đoán tốt nhất (vẽ hoặc gắn tag) và **luôn** bật
   `needs_review` trên shape hoặc tag đó.
-- Xe **đè đúng lên** một vạch (điểm giữa đáy ảnh nằm trên vạch): chọn làn phía mũi xe đang hướng tới, bật
-  `needs_review` trên cả hai polyline.
+- **Rule 150 px (đo được, bắt buộc):** kéo tưởng tượng từng ranh giới xuống tới mép nắp capo. Nếu điểm đó cách
+  x = 640 **dưới 150 px** thì bật `needs_review` trên polyline đó. Không cần đoán xe có "đang chuyển làn" hay không.
+- Xe **đè đúng lên** một vạch (x = 640 nằm trên vạch khi kéo xuống mép nắp capo): vạch đó là ranh giới **phải** nếu
+  phần lớn nắp capo nằm bên trái vạch, là ranh giới **trái** nếu ngược lại; tìm vạch gần nhất ở phía còn lại cho bên
+  kia. Bật `needs_review` trên cả hai polyline. Không dùng tiêu chí "mũi xe hướng tới" vì mũi xe chếch thì không rõ.
 - Không để trống một bên mà không có tag: mỗi bên phải có **hoặc** polyline **hoặc** tag unknown.
 
 ## 8. Temporal rule
@@ -163,6 +210,8 @@ trái, chỉ là khoảng.
 | (mô tả) | Phố một chiều, không có vạch sơn nào giữa hai hàng xe đỗ | Không có polyline. Tag `ego_boundary_unknown`, `side = both` | Mục 7 (UNKNOWN) |
 | BDD26 | Ảnh đêm. Bên trái làn xe chủ là bó vỉa và đảo giao thông tại giao lộ, không có vạch kẻ sọc | Polyline bên trái (nếu có): `topology = normal` — bó vỉa, đảo bê tông không phải vạch sơn gore. Liền hay đứt, vẽ hay unknown: đếm đoạn sơn theo mục 4 và mục 6 | Mục 4 (không tính là merge_split), mục 6 |
 | BDD17 | Phố trời mưa, đường ướt, bên trái là xe đỗ sát lề, không có vạch kẻ sọc hay nhánh rẽ | `ego_left`: `topology = normal` — xe đỗ và lề phố không phải làn nhập/tách. Vạch khó thấy do đường ướt tính vào `faded` nếu từ 1/3 chiều dài trở lên | Mục 4, mục 6 |
+| BDD12 | Xe dừng ngay trước vạch qua đường; giữa nắp capo và vạch qua đường không có vạch làn nào; phía bên kia vạch qua đường có vạch làn | `ego_left` bắt đầu ở mép **xa** vạch qua đường khoảng (340, 311), đi lên xa tới khoảng (592, 232). `ego_right` bắt đầu ở mép xa khoảng (800, 321), đi lên tới khoảng (716, 255). Không điểm nào nằm trên hoặc dưới vạch qua đường | Mục 5 (xe sát vạch qua đường) |
+| (mô tả) | Phố có đống tuyết giữa đường; bên trái có một vạch trắng liền dài hơn 50 px; bên phải chỉ có tuyết và bó vỉa | Vạch trắng nằm bên trái x = 640 → `ego_left`, `topology = normal` (đống tuyết không phải gore). Bên phải: tag `ego_boundary_unknown`, `side = right`. Không vẽ theo mép đống tuyết | Mục 5 (vật cản), mục 7 (UNKNOWN), bước 0 cây quyết định |
 
 ## 10. Common mistakes
 
@@ -185,6 +234,22 @@ trái, chỉ là khoảng.
 14. **Kéo polyline băng qua vạch qua đường.** Có vạch làn trước vạch qua đường thì dừng ở mép gần; không có thì bắt đầu
     ở mép xa (mục 5).
 
-**Tự kiểm trước khi export:** (1) mỗi ảnh, mỗi bên có đúng một polyline **hoặc** tag unknown; (2) không còn
-attribute nào là `__undefined__` — mở từng shape trong danh sách Objects bên phải để xem; (3) bấm **Ctrl+S** rồi mới
-export.
+15. **Gán nhầm trái ↔ phải.** Vạch nằm bên trái x = 640 (kéo xuống mép nắp capo) luôn là `ego_left`, kể cả khi bên
+    trái còn vạch hay mép đường khác xa hơn.
+16. **Vẽ theo mép vật cản** (đống tuyết, cọc, rào) hoặc chọn `merge_split` vì vật cản. Vật cản không phải vạch sơn.
+17. **Nối qua sau xe mà vẫn chọn `visible`.** Đã nối qua đoạn bị xe che thì `visibility = occluded`.
+18. **Quên `needs_review` khi xe sát vạch.** Ranh giới cách x = 640 dưới 150 px ở mép nắp capo là bắt buộc bật.
+
+**Thao tác CVAT cần biết:**
+
+- **Thêm tag `ego_boundary_unknown`:** tag gắn cho **cả ảnh**, không vẽ trên canvas. Dùng nút **Setup tag** (biểu tượng
+  nhãn) ở thanh công cụ bên trái, chọn `ego_boundary_unknown`; tag hiện trong danh sách **Objects** bên phải. Mở tag đó
+  trong Objects để chọn `side` — chọn xong mới tính là đã gắn.
+- **Chọn attribute và `needs_review`:** trong danh sách **Objects** bên phải, bấm mũi tên mở từng shape/tag để thấy
+  `marking`, `visibility`, `topology`, `side` và ô `needs_review`. Canvas không hiện `needs_review`, phải kiểm ở đây.
+- CVAT **không chặn** export khi còn `__undefined__`, nên phải tự kiểm theo danh sách dưới.
+
+**Tự kiểm trước khi export:** (1) mỗi ảnh, mỗi bên có đúng một polyline **hoặc** tag unknown, và tag đã chọn `side`;
+(2) không còn attribute nào là `__undefined__` — mở từng shape/tag trong danh sách Objects bên phải để xem; (3) vạch
+bên trái x = 640 là `ego_left`, bên phải là `ego_right`; (4) ranh giới nào cách x = 640 dưới 150 px ở mép nắp capo đã
+bật `needs_review`; (5) bấm **Ctrl+S** rồi mới export.

@@ -1,1 +1,3 @@
 time,asker,question,answered_how,guideline_change
+"trong khoảng 14:21–14:29 (lúc đang làm job, không ghi giờ chính xác)",Hồ Minh Hậu,Ảnh BDD24 không biết đánh label như nào,"Không trả lời rule; bảo làm theo cách hiểu từ guideline và ghi lại chỗ khó","v3: thêm cây quyết định ở đầu guideline và rule vật cản trên mặt đường (tuyết, cọc, rào) không phải vạch sơn"
+"trong khoảng 14:21–14:29 (lúc đang làm job, không ghi giờ chính xác)",Hồ Minh Hậu,"BDD24 có vật cản giữa đường (đống tuyết), không biết để attribute như nào","Không trả lời rule; bảo làm theo guideline","v3: vật cản không làm đổi topology (không phải gore); bên chỉ có vật cản/bó vỉa là UNKNOWN; thêm bước tự kiểm vạch bên trái x = 640 là ego_left"

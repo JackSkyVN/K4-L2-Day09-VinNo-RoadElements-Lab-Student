@@ -1,8 +1,8 @@
 CVAT task reference — thay mọi placeholder mới là xong.
 
-CVAT version: TODO
-Task calibration (tên, id): TODO
-Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: TODO
-File export đã nộp (đường dẫn trong repo): TODO
-Guideline version dán trong Guide của task: TODO
-Ghi chú cho người tiếp nhận: TODO
+CVAT version: CVAT 2.74.1 tại http://localhost:8080 (máy Minh Đức)
+Task calibration (tên, id): Guideline_challenge — id không ghi lại (xem trong trang Tasks của CVAT máy Minh Đức)
+Task bản cuối theo guideline v3 (tên, id) hoặc lý do không có: Không tạo. Guideline v3 được viết sau blind test để nộp cuối buổi; không còn batch ảnh nào cần label theo v3 trong phạm vi lab, và nhãn CVAT (03_cvat_labels.json) không đổi từ v1 nên task mới sẽ chỉ khác phần Guide.
+File export đã nộp (đường dẫn trong repo): project/06_calibration_exports/minhduc.zip, project/06_calibration_exports/vianh.zip, project/06_calibration_exports/duyanh.zip (calibration, guideline v1); project/07_blind_handoff/peer_output/peer_blind.zip (blind test của Hồ Minh Hậu, guideline v2)
+Guideline version dán trong Guide của task: v1 (task calibration Guideline_challenge); blind pack gửi người ngoài nhóm dùng v2
+Ghi chú cho người tiếp nhận: Tạo task mới thì dán 03_cvat_labels.json vào tab Raw và dán nguyên 02_guideline.md (v3) vào Guide. Chạy "py lab9.py verify" để kiểm gold vẫn khớp tag gold-freeze.

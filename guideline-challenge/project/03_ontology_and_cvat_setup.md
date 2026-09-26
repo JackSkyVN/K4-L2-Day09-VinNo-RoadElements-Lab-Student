@@ -32,8 +32,9 @@ placeholder mới là xong (gate G2).
 ## CVAT
 
 - **Phiên bản CVAT** (`make cvat-status`): CVAT 2.74.1 tại http://localhost:8080 (máy Minh Đức)
-- **Tên task calibration** (có version guideline, ví dụ `team07-calib-v1`): TODO
-- **Guide của task đã dán `02_guideline.md`?** TODO (có / chưa)
+- **Tên task calibration** (có version guideline, ví dụ `team07-calib-v1`): `Guideline_challenge` (CVAT máy Minh Đức,
+  tạo với guideline v1; tên task không ghi version — lần sau nên đặt dạng `VinNo-calib-v1-<tên>`)
+- **Guide của task đã dán `02_guideline.md`?** Có
 - **Nhóm dùng Track hay Shape, vì sao:** Shape — task ảnh tĩnh, mỗi ảnh độc lập, không cần nối đối tượng qua frame
 
 ## Setup test
@@ -41,4 +42,8 @@ placeholder mới là xong (gate G2).
 Một thành viên **chưa tham gia setup** mở task và trả lời: label gì, dùng tool nào, gán attribute nào, khi nào
 escalate. Ghi lại ai test và chỗ họ vấp:
 
-TODO
+Các thành viên mở task calibration và label được ngay, không báo vấp chỗ nào về setup (label, tool polyline, attribute,
+tag). Ghi chú trung thực: cả 3 thành viên đều đã đọc guideline trước khi mở task, nên đây không phải một setup test
+"lạnh" hoàn toàn. Bằng chứng thao tác CVAT từ người ngoài nhóm có ở blind test: Hồ Minh Hậu tự dựng task từ
+blind pack và làm được, nhưng chỉ ra tag `ego_boundary_unknown`, `side`, `needs_review` và `__undefined__` dễ thao tác
+sai (`07_blind_handoff/peer_feedback.md` câu 4) — đã thêm mục thao tác CVAT vào guideline v3.

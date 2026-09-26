@@ -3,8 +3,9 @@
 Điền trước phút 15. Thay mọi placeholder; còn sót thì `make status` báo ở gate G1.
 
 - **Team:** VinNo
-- **Nhóm peer test bài của mình:** TODO (cặp A ↔ B; số nhóm lẻ thì ring 3 nhóm A → B → C → A — Lab Coach công bố)
-- **Nhóm mình test bài của:** TODO
+- **Nhóm peer test bài của mình:** Không có nhóm peer chính thức trong buổi lab. Blind test do một người ngoài nhóm
+  (chưa đọc guideline, chưa thấy gold) thực hiện — chi tiết ở `07_blind_handoff/peer_feedback.md`
+- **Nhóm mình test bài của:** Không có — không nhóm nào gửi blind pack cho VinNo
 - **Problem family:** Lane boundary — ranh giới trái/phải của làn xe chủ (ego lane) tại merge/split, vạch mờ/đứt và vạch bị xe che
 - **Nguồn ảnh:** `bdd100k`
 
@@ -34,7 +35,7 @@ của nhóm peer.
 | 07 | `score` + điền `transfer_score.csv`, `gts`, chép `peer_feedback.md` | Duy Anh (chạy lệnh); Vĩ Anh (chấm 0/1 theo gold) | — |
 | 08 | Guideline v3 + dòng v3 revision log | Minh Đức | Góp chỗ nhóm peer vấp |
 | 08 | Đủ ≥ 8 thẻ edge case | Vĩ Anh | — |
-| 08 | Điền `09_...txt`, chạy `check`, push cuối | Duy Anh | Xoá hết TODO trong file mình phụ trách |
+| 08 | Điền `09_...txt`, chạy `check`, push cuối | Duy Anh | Xoá hết placeholder còn sót trong file mình phụ trách |
 | — | Trình bày 2 phút cuối buổi | Minh Đức (quy tắc không dùng được, đã sửa gì) | Người vẽ bài nhóm khác nói chỗ khó nhất |
 
 Gợi ý chia vai (nhóm 2–3 người thì gộp): **spec owner** (`01`, `02`), **CVAT owner** (`03_*`, `sample_pack.csv`,
