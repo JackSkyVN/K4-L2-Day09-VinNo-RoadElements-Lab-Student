@@ -3,9 +3,11 @@
 Điền trước phút 15. Thay mọi placeholder; còn sót thì `make status` báo ở gate G1.
 
 - **Team:** VinNo
-- **Nhóm peer test bài của mình:** Wibulord — người label blind: Hồ Minh Hậu (chi tiết ở
+- **Nhóm peer test bài của mình:** Wibulord (cặp VinNo ↔ Wibulord) —
+  https://github.com/MinhNH02/K4-L2-DAY09-Wibulord-Road-Elements-Lab — người label blind: Hồ Minh Hậu (chi tiết ở
   `07_blind_handoff/peer_feedback.md`)
-- **Nhóm mình test bài của:** Không có — không nhóm nào gửi blind pack cho VinNo
+- **Nhóm mình test bài của:** Wibulord (traffic light: trạng thái đèn `state` + đèn có điều khiển xe mình không
+  `relevance` tại giao lộ nhiều đầu đèn)
 - **Problem family:** Lane boundary — ranh giới trái/phải của làn xe chủ (ego lane) tại merge/split, vạch mờ/đứt và vạch bị xe che
 - **Nguồn ảnh:** `bdd100k`
 

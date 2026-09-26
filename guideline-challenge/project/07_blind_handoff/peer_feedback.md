@@ -3,7 +3,7 @@
 Phần 1 do **nhóm peer** trả lời (gửi kèm file export). Phần 2 do **nhóm owner** điền. Thay mọi placeholder mới
 là xong (gate G5).
 
-- **Nhóm peer:** Wibulord (nhóm owner: VinNo). Người label chưa đọc guideline và chưa thấy gold, làm theo đúng quy
+- **Nhóm peer:** Wibulord (cặp VinNo ↔ Wibulord, repo https://github.com/MinhNH02/K4-L2-DAY09-Wibulord-Road-Elements-Lab). Người label chưa đọc guideline và chưa thấy gold, làm theo đúng quy
   trình: nhận `blind-pack.zip` (guideline v2), tự tạo task CVAT, label 5 ảnh blind, owner không giải thích rule (2 câu
   hỏi được ghi trong `clarification_log.csv`). Export: `peer_output/peer_blind.zip` (job CVAT tạo 14:21, sửa lần cuối
   14:29 ngày 2026-09-26).
