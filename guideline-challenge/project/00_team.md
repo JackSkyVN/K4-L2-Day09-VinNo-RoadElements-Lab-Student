@@ -3,8 +3,8 @@
 Điền trước phút 15. Thay mọi placeholder; còn sót thì `make status` báo ở gate G1.
 
 - **Team:** VinNo
-- **Nhóm peer test bài của mình:** Không có nhóm peer chính thức trong buổi lab. Blind test do một người ngoài nhóm
-  (chưa đọc guideline, chưa thấy gold) thực hiện — chi tiết ở `07_blind_handoff/peer_feedback.md`
+- **Nhóm peer test bài của mình:** Wibulord — người label blind: Hồ Minh Hậu (chi tiết ở
+  `07_blind_handoff/peer_feedback.md`)
 - **Nhóm mình test bài của:** Không có — không nhóm nào gửi blind pack cho VinNo
 - **Problem family:** Lane boundary — ranh giới trái/phải của làn xe chủ (ego lane) tại merge/split, vạch mờ/đứt và vạch bị xe che
 - **Nguồn ảnh:** `bdd100k`

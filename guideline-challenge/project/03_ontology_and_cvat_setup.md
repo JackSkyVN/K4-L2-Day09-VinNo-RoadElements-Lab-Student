@@ -44,6 +44,6 @@ escalate. Ghi lại ai test và chỗ họ vấp:
 
 Các thành viên mở task calibration và label được ngay, không báo vấp chỗ nào về setup (label, tool polyline, attribute,
 tag). Ghi chú trung thực: cả 3 thành viên đều đã đọc guideline trước khi mở task, nên đây không phải một setup test
-"lạnh" hoàn toàn. Bằng chứng thao tác CVAT từ người ngoài nhóm có ở blind test: Hồ Minh Hậu tự dựng task từ
+"lạnh" hoàn toàn. Bằng chứng thao tác CVAT từ người ngoài nhóm có ở blind test: Hồ Minh Hậu (nhóm Wibulord) tự dựng task từ
 blind pack và làm được, nhưng chỉ ra tag `ego_boundary_unknown`, `side`, `needs_review` và `__undefined__` dễ thao tác
 sai (`07_blind_handoff/peer_feedback.md` câu 4) — đã thêm mục thao tác CVAT vào guideline v3.
