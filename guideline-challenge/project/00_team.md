@@ -2,14 +2,15 @@
 
 Điền trước phút 15. Thay mọi placeholder; còn sót thì `make status` báo ở gate G1.
 
-- **Team:** TODO (ví dụ `team07`)
+- **Team:** VinNo
 - **Nhóm peer test bài của mình:** TODO (cặp A ↔ B; số nhóm lẻ thì ring 3 nhóm A → B → C → A — Lab Coach công bố)
 - **Nhóm mình test bài của:** TODO
-- **Problem family:** TODO (xem README mục "1 · Chọn bài toán")
-- **Nguồn ảnh:** TODO (`bdd100k`, `gtsdb`, `lisa` — chỉ dùng ảnh trong `data/`)
+- **Problem family:** Lane boundary — ranh giới trái/phải của làn xe chủ (ego lane) tại merge/split, vạch mờ/đứt và vạch bị xe che
+- **Nguồn ảnh:** `bdd100k`
 
 | Thành viên | GitHub | Vai trò chính | File phụ trách |
 |---|---|---|---|
+| Nguyễn Trọng Minh Đức | emsiCUD | TODO | TODO |
 | TODO | TODO | TODO | TODO |
 
 Gợi ý chia vai (nhóm 2–3 người thì gộp): **spec owner** (`01`, `02`), **CVAT owner** (`03_*`, `sample_pack.csv`,
